@@ -1,0 +1,162 @@
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<xsd:element name="historia_choroby" type="typhistoria_choroby"/>
+
+	<xsd:complexType name="typhistoria_choroby">
+		  <xsd:sequence>
+			 <xsd:element name="pacjent" type="typPacjent"/>
+			 <xsd:element name="historia" type="typHistoria"/>
+		  </xsd:sequence>
+		  <xsd:attribute name="numer_karty" type="typNumer_karty" use="required"/>
+		  <xsd:attribute name="poradnia" type="xsd:string" use="required"/>
+	   </xsd:complexType>
+	   
+	<xsd:complexType name="typPacjent">
+		  <xsd:sequence>
+			 <xsd:element name="nazwisko" type="typNazwisko"/>
+			 <xsd:element name="imie" type="typImie"/>
+			 <xsd:element name="plec" type="typPlec"/>
+			 <xsd:element name="data_urodzenia" type="xsd:date"/>
+			 <xsd:element name="adres" type="xsd:string"/>
+			 <xsd:element name="data_rejestracji" type="xsd:date"/>
+			 <xsd:element name="nr_ksiazeczki_zdrowia" type="typNr_ksiazeczki_zdrowia"/>
+			 <xsd:element name="ubezpieczenie" type="typUbezpieczenie"/>	
+			 <xsd:element name="krew" minOccurs="0" type="typKrew"/>
+		  </xsd:sequence>
+		  <xsd:attribute name="pesel" type="typPesel" use="required"/>
+	   </xsd:complexType>   
+	   
+	<xsd:complexType name="typHistoria">
+		<xsd:sequence>
+			 <xsd:element name="choroba" minOccurs="0" maxOccurs="unbounded">
+			 <xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="data" type="xsd:date"/>
+					<xsd:element name="wywiad" type="xsd:string"/>
+					<xsd:element name="numer_choroby" type="typNumer_choroby"/>
+					<xsd:element name="pierwsze_zachorowanie" type="typTN"/>
+					<xsd:element name="niezdolnosc_praca" type="typNiezdolnosc_praca"/>
+				</xsd:sequence>
+			 </xsd:complexType>  
+			 </xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	   
+
+	<xsd:complexType name="typUbezpieczenie">
+		  <xsd:choice>
+			 <xsd:element name="ubezpieczony_status" type="typTStatus"/>
+			 <xsd:element name="nieubezpieczony_status" type="typNStatus"/>
+		  </xsd:choice>
+	</xsd:complexType>  
+	 
+	<xsd:complexType name="typKrew">
+		  <xsd:sequence>
+			 <xsd:element name="grupa" type="typGrupa"/>
+			 <xsd:element name="rh" type="typRh"/>
+		  </xsd:sequence>
+	</xsd:complexType>  
+
+	<xsd:simpleType name="typStatusValue">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="czynny|bierny"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	
+	<xsd:complexType name="typTStatus">
+		<xsd:simpleContent>
+			<xsd:extension base="typStatusValue">
+				<xsd:attribute name="oddzial_nfz" use="required">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:integer">
+							<xsd:minInclusive value="1"/>
+							<xsd:maxInclusive value="16"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+
+	
+	<xsd:simpleType name="typNStatus">
+		  <xsd:restriction base="xsd:string">
+			 <xsd:pattern value="samopłacący|leczony bezpłatnie"/>
+		  </xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="typNazwisko">
+		  <xsd:restriction base="xsd:string">
+			 <xsd:pattern value="[A-Z]([a-z])+(-[A-Z]([a-z])+)*"/>
+		  </xsd:restriction>
+	</xsd:simpleType>	 
+	
+	<xsd:simpleType name="typImie">
+		  <xsd:restriction base="xsd:string">
+			 <xsd:pattern value="[A-Z]([a-z])+"/>
+		  </xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="typPlec">
+		  <xsd:restriction base="xsd:string">
+			 <xsd:pattern value="M|Ż"/>
+		  </xsd:restriction>
+	</xsd:simpleType>	
+	
+	<xsd:simpleType name="typNr_ksiazeczki_zdrowia">
+		  <xsd:restriction base="xsd:string">
+			 <xsd:pattern value="(\d){1,6}\/(\d){4}"/>
+		  </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="typPesel">
+		  <xsd:restriction base="xsd:integer">
+			 <xsd:pattern value="([0-9]){11}"/>
+		  </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="typNumer_choroby">
+		  <xsd:restriction base="xsd:string">
+			 <xsd:pattern value="[A-Z](\d){2}.(\d)"/>
+		  </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="typTN">
+		  <xsd:restriction base="xsd:string">
+			 <xsd:pattern value="T|N"/>
+		  </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="typGrupa">
+		  <xsd:restriction base="xsd:string">
+			 <xsd:enumeration value="A"/>
+			 <xsd:enumeration value="B"/>
+			 <xsd:enumeration value="0"/>
+			 <xsd:enumeration value="AB"/>
+		  </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="typRh">
+		  <xsd:restriction base="xsd:string">
+			 <xsd:pattern value="\+|-"/>
+		  </xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:complexType name="typNiezdolnosc_praca">
+		  <xsd:sequence>
+			 <xsd:element name="od" minOccurs="0" type="xsd:date"/>
+			 <xsd:element name="do" minOccurs="0" type="xsd:date"/>
+		  </xsd:sequence>
+	</xsd:complexType>  
+	
+		<xsd:simpleType name="typNumer_karty">
+		  <xsd:restriction base="xsd:integer">
+			 <xsd:minInclusive value="1"/>
+			 <xsd:maxInclusive value="999999"/>
+		  </xsd:restriction>
+	</xsd:simpleType>
+	
+	
+</xsd:schema>
